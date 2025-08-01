@@ -1,0 +1,16 @@
+[Unit]
+Description=ETCD Archiver Collector Service
+Wants=network-online.target
+After=network-online.target
+Requires=etcd-archiver-storage.service
+After=etcd-archiver-storage.service
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/etcd-archiver
+ExecStart=/opt/etcd-archiver/collector.js $ETCD_ARCHIVER_OPTIONS
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

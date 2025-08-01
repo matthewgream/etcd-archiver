@@ -1,0 +1,4 @@
+Archiver service for ETCD key/values
+
+Connect to specified etcd server, listen for updated key/values, 
+and store in local database.

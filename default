@@ -1,0 +1,3 @@
+
+ETCD_ARCHIVER_OPTIONS="--etcd-host=badtuna:2379 --etcd-path=/badtuna --db-file=/opt/storage/badtuna/db-badtuna --db-time=300 --db-report=1800"
+

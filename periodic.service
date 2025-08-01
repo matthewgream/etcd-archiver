@@ -1,0 +1,13 @@
+[Unit]
+Description=ETCD Archiver Periodic Service
+After=network.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/default/etcd-archiver
+ExecStart=/opt/etcd-archiver/periodic.js $ETCD_ARCHIVER_OPTIONS
+SuccessExitStatus=0
+Nice=+10
+
+[Install]
+WantedBy=multi-user.target
