@@ -9,6 +9,7 @@ After=etcd-archiver-storage.service
 Type=simple
 EnvironmentFile=-/etc/default/etcd-archiver
 ExecStart=/opt/etcd-archiver/collector.js $ETCD_ARCHIVER_OPTIONS
+SyslogIdentifier=etcd-archiver
 Restart=on-failure
 RestartSec=5s
 

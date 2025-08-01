@@ -93,13 +93,13 @@ function util_num_sum(x) {
 // ----------------------
 
 const { open } = require('lmdb');
-let database_client = null;
+let database_client;
 function database_open(path) {
     database_client = open({ path, compression: true });
 }
 async function database_close() {
     await util_exception_wrapper_async(
-        async () => (database_client ? (await database_client.close(), (database_client = null)) : null),
+        async () => (database_client ? (await database_client.close(), (database_client = undefined)) : undefined),
         (error) => util_err(`Error closing the database: ${error}`)
     );
 }
@@ -150,8 +150,7 @@ function collector_report() {
     util_log(`collector: writes=${collector_total}; database: ${util_obj_str(database_stats())}`);
 }
 
-let collector_interval = null,
-    collector_reporter = null;
+let collector_interval, collector_reporter;
 function collector_begin() {
     collector_interval = setInterval(collector_write, CONFIG_DBTIME * 1000);
     collector_reporter = setInterval(collector_report, CONFIG_DBREPORT * 1000);
@@ -159,12 +158,12 @@ function collector_begin() {
 function collector_end() {
     if (collector_interval) {
         clearInterval(collector_interval);
-        collector_interval = null;
+        collector_interval = undefined;
         collector_write(true);
     }
     if (collector_reporter) {
         clearInterval(collector_reporter);
-        collector_reporter = null;
+        collector_reporter = undefined;
         collector_report();
     }
 }
@@ -172,8 +171,7 @@ function collector_end() {
 // ----------------------
 
 const { Etcd3 } = require('etcd3');
-let etcd3_client = null,
-    etcd3_watcher = null;
+let etcd3_client, etcd3_watcher;
 async function etcd3_open(hosts, path) {
     (etcd3_client = new Etcd3({ hosts }))
         .watch()
@@ -193,11 +191,11 @@ async function etcd3_open(hosts, path) {
 }
 async function etcd3_close() {
     await util_exception_wrapper_async(
-        async () => (etcd3_watcher ? (await etcd3_watcher.cancel(), (etcd3_watcher = null)) : null),
+        async () => (etcd3_watcher ? (await etcd3_watcher.cancel(), (etcd3_watcher = undefined)) : undefined),
         (error) => util_err(`Error cancelling etcd3 watcher: ${error}`)
     );
     await util_exception_wrapper_async(
-        async () => (etcd3_client ? (await etcd3_client.close(), (etcd3_client = null)) : null),
+        async () => (etcd3_client ? (await etcd3_client.close(), (etcd3_client = undefined)) : undefined),
         (error) => util_err(`Error closing etcd3 client: ${error}`)
     );
 }
